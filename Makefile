@@ -1,12 +1,14 @@
-# Makefile for generating minified files
+all: join-script-files modularize-script minify-script
 
-.PHONY: all
+include ../../build/modules.mk
 
-# we cheat and process all .js files instead of an exhaustive list
-all: $(patsubst %.js,%.min.js,$(filter-out %.min.js,$(wildcard *.js)))
+MODULE = flot
+MODULARIZE_OPTIONS = -jq -d "event/drag,mousewheel,resize"
+SOURCE_SCRIPT_FOLDER = .
 
-%.min.js: %.js
-	yui-compressor $< -o $@
-
-test:
-	./node_modules/.bin/jshint *jquery.flot.js
+SOURCE_SCRIPT_FILES = ${SOURCE_SCRIPT_FOLDER}/jquery.flot.js \
+	${SOURCE_SCRIPT_FOLDER}/jquery.flot.time.js \
+	${SOURCE_SCRIPT_FOLDER}/jquery.flot.navigate.js \
+	${SOURCE_SCRIPT_FOLDER}/jquery.flot.canvas.js \
+	${SOURCE_SCRIPT_FOLDER}/jquery.flot.resize.js \
+	${SOURCE_SCRIPT_FOLDER}/jquery.flot.selection.js
